@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>产品应用程序</title>
+</head>
+<body>
+    <div>
+        所有产品列表
+        <ul id="products"></ul>
+    </div>
+
+    <div>
+        <h2>通过id查找产品</h2>
+        <input type="text" id="proId" size="5" />
+        <input type="button" value="查找" onclick="find();" />
+        <p id="product"/>
+    </div>
+
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+ 
+    <script>
+
+        var uri = 'api/Products';
+
+        $(document).ready(function () {
+
+            
+            $.getJSON(uri)
+                .done(function (data) {
+                   
+                    $.each(data, function (key, item) {
+                        $('<li>', { text: formatItem(item) }).appendTo($('#products'));
+                    });
+                });
+        });
+
+
+        function formatItem(item) {
+            return item.Name + ':$' + item.Price;
+        }
+
+        function find() {
+            var id = $('#proId').val();
+           
+            $.getJSON(uri + '/' + id)
+                .done(function (data) {
+                    debugger
+                    console.log("hello wolrd");
+                    console.log(data);
+                    $('#product').text(formatItem(data));
+                })
+                .fail(function (jqXHR, textStatus, err) {
+                    $("#product").text('Error:' + err);
+                });
+
+        }
+
+    </script>
+</body >
+</html >
